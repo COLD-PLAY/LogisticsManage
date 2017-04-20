@@ -12,15 +12,12 @@
   <link rel="stylesheet" type="text/css" href="mystyle.css">
 </head>
 <body>
-<center>
-  <h1>欢迎访问 顺水 物流信息管理系统</h1>
-
   <div name="handlers" class="box">
+    <h2>“顺江”物流信息管理系统</h2>
     <a href="signin.jsp" class="jump">登录</a>
     <hr class="line">
     <a href="signup.jsp" class="jump">注册</a>
     <hr class="line">
   </div>
-</center>
 </body>
 </html>

@@ -20,10 +20,10 @@
         String username = request.getParameter("username");
         request.setAttribute("username", username);
 
-        String address = new String((request.getParameter("fromaddress")).getBytes("ISO8859-1"), "UTF-8");
-        String phonenum = new String((request.getParameter("fromphonenum")).getBytes("ISO8859-1"), "UTF-8");
-        String touser = new String((request.getParameter("touser")).getBytes("ISO8859-1"), "UTF-8");
-        String toaddress = new String((request.getParameter("toaddress")).getBytes("ISO8859-1"), "UTF-8");
+        String fromaddress = request.getParameter("fromaddress");
+        String fromphonenum = request.getParameter("fromphonenum");
+        String touser = request.getParameter("touser");
+        String toaddress = request.getParameter("toaddress");
         String tophonenum = request.getParameter("tophonenum");
 
         final String JDBC_DRIVE = "com.mysql.jdbc.Driver";
@@ -37,22 +37,26 @@
 
         boolean flag = true;
 
-        System.out.println(username);
+//        System.out.println(username);
 
         // 添加订单
-        if (username != null && address != null && phonenum != null && touser != null && toaddress != null && tophonenum != null) {
+        if (username != null && fromaddress != null && fromphonenum != null && touser != null && toaddress != null && tophonenum != null) {
             try {
                 Class.forName(JDBC_DRIVE);
 
                 conn = DriverManager.getConnection(DB_URL, USER, PASS);
                 stmt = conn.createStatement();
 
-                // 得到当前日期，并作为订单号使用
+                // 得到当前时间，并作为订单号使用
                 SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddhhmm");
                 Date now = new Date();
                 String ordernum = sf.format(now).toString();
 
-                String sql = "INSERT INTO orders VALUE('" + username + "', '" + phonenum + "', '" + address + "', '" + touser + "', '" + tophonenum + "', '" + toaddress + "', '" + ordernum + "');";
+                fromaddress = new String(fromaddress.getBytes("ISO8859-1"), "UTF-8");
+                toaddress = new String(toaddress.getBytes("ISO8859-1"), "UTF-8");
+                touser = new String(touser.getBytes("ISO8859-1"), "UTF-8");
+
+                String sql = "INSERT INTO orders VALUE('" + username + "', '" + fromphonenum + "', '" + fromaddress + "', '" + touser + "', '" + tophonenum + "', '" + toaddress + "', '" + ordernum + "', '" + fromaddress + "');";
                 stmt.execute(sql);
 
                 stmt.close();
@@ -82,6 +86,9 @@
         alert("添加成功！跳转用户页面");
     </script>
     <%
+                System.out.print("添加成功！");
+//                request.getServletContext().getRequestDispatcher("/user.jsp?username=" + username);
+                request.setAttribute("username", username);
                 request.getServletContext().getRequestDispatcher("/user.jsp").forward(request, response);
             }
             else {
@@ -105,12 +112,12 @@
                 ResultSet rs = stmt.executeQuery(sql);
 
                 if (rs.next()) {
-                    address = rs.getString("address");
-                    phonenum = rs.getString("phonenum");
+                    fromaddress = rs.getString("address");
+                    fromphonenum = rs.getString("phonenum");
 
                     // 添加属性
-                    request.setAttribute("address", address);
-                    request.setAttribute("phonenum", phonenum);
+                    request.setAttribute("address", fromaddress);
+                    request.setAttribute("phonenum", fromphonenum);
                 }
 
                 stmt.close();
@@ -134,12 +141,13 @@
         }
     %>
     <div class="box">
-        <form onsubmit="return checkall(this)" name="addorder" action="addorder.jsp" method="post">
+        <p id="username" hidden="hidden">${username}</p>
+        <form onsubmit="return checkall(this)" name="addorder" action="addorder.jsp?username=${username}" method="post">
             <input type="text" name="fromuser" value="${username}">
             <hr class="line">
-            <input type="text" name="fromaddress" value="${address}">
+            <input type="text" name="fromaddress" placeholder="当前地址" value="${address}">
             <hr class="line">
-            <input type="text" name="fromphonenum" value="${phonenum}">
+            <input type="text" name="fromphonenum" placeholder="当前电话" value="${phonenum}">
             <hr class="line">
             <input type="text" name="touser" placeholder="发送到用户">
             <hr class="line">
@@ -147,14 +155,13 @@
             <hr class="line">
             <input type="text" name="tophonenum" placeholder="发送到电话">
             <hr class="line">
-            <input type="submit" value="提交">
+            <input type="submit" value="添加">
         </form>
     </div>
 
     <script type="text/javascript">
-        var username = ${username};
-        alert(username);
         function checkall(f) {
+            var username = document.getElementById("username").innerText;
             if (f.fromuser.value == "" || f.fromaddress.value == "" || f.fromphonenum.value == "" || f.touser.value == "" || f.toaddress.value == "" || f.tophonenum == "") {
                 alert("请填写完整！");
                 return false;

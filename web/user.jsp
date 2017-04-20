@@ -27,7 +27,10 @@
                 <td>当前状态</td>
             </tr>
             <%
-                String username = new String((request.getParameter("username")).getBytes("ISO8859-1"), "UTF-8");
+//                String username = new String((request.getParameter("username")).getBytes("ISO8859-1"), "UTF-8");
+//                String username = request.getParameter("username");
+                // 以这种方式获取用户名不会出现乱码
+                String username = request.getAttribute("username").toString();
                 System.out.println(username);
 
                 final String JDBC_DRIVE = "com.mysql.jdbc.Driver";
@@ -39,49 +42,54 @@
                 Connection conn = null;
                 Statement stmt = null;
 
-                try {
-                    Class.forName(JDBC_DRIVE);
+                if (username.compareTo("root") == 0) {
+                    out.print("<tr><td>当前在root 管理员用户下</td></tr>");
+                }
 
-                    conn = DriverManager.getConnection(DB_URL, USER, PASS);
-                    stmt = conn.createStatement();
+                else {
+                    try {
+                        Class.forName(JDBC_DRIVE);
 
-                    String sql = "SELECT * FROM orders WHERE fromuser='" + username + "' OR touser='" + username + "';";
-                    ResultSet rs = stmt.executeQuery(sql);
+                        conn = DriverManager.getConnection(DB_URL, USER, PASS);
+                        stmt = conn.createStatement();
 
-                    if (!rs.next()) {
-                        // 判空
-                        out.print("<tr><td>当前没有订单</td></tr>");
-                    }
-                    else {
-                        rs.previous();
-                        while (rs.next()) {
-                            out.print("<tr>" +
-                                    "<td>" + rs.getString("fromuser") + "</td>" +
-                                    "<td>" + rs.getString("fromphonenum") + "</td>" +
-                                    "<td>" + rs.getString("fromaddress") + "</td>" +
-                                    "<td>" + rs.getString("touser") + "</td>" +
-                                    "<td>" + rs.getString("tophonenum") + "</td>" +
-                                    "<td>" + rs.getString("toaddress") + "</td>" +
-                                    "<td>" + rs.getString("ordernum") + "</td>" +
-                                    "<td>" + rs.getString("status") + "</td>" +
-                                    "</tr>"
-                            );
+                        String sql = "SELECT * FROM orders WHERE fromuser='" + username + "' OR touser='" + username + "';";
+                        ResultSet rs = stmt.executeQuery(sql);
+
+                        if (!rs.next()) {
+                            // 判空
+                            out.print("<tr><td>当前没有订单</td></tr>");
+                        } else {
+                            rs.previous();
+                            while (rs.next()) {
+                                out.print("<tr>" +
+                                        "<td>" + rs.getString("fromuser") + "</td>" +
+                                        "<td>" + rs.getString("fromphonenum") + "</td>" +
+                                        "<td>" + rs.getString("fromaddress") + "</td>" +
+                                        "<td>" + rs.getString("touser") + "</td>" +
+                                        "<td>" + rs.getString("tophonenum") + "</td>" +
+                                        "<td>" + rs.getString("toaddress") + "</td>" +
+                                        "<td>" + rs.getString("ordernum") + "</td>" +
+                                        "<td>" + rs.getString("status") + "</td>" +
+                                        "</tr>"
+                                );
+                            }
                         }
-                    }
-                } catch (SQLException se) {
-                    se.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (stmt != null) stmt.close();
                     } catch (SQLException se) {
                         se.printStackTrace();
-                    }
-                    try {
-                        if (conn != null) conn.close();
-                    } catch (SQLException se) {
-                        se.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            if (stmt != null) stmt.close();
+                        } catch (SQLException se) {
+                            se.printStackTrace();
+                        }
+                        try {
+                            if (conn != null) conn.close();
+                        } catch (SQLException se) {
+                            se.printStackTrace();
+                        }
                     }
                 }
             %>
@@ -94,19 +102,24 @@
         <div>
             <a href="addorder.jsp?username=${username}" class="jump">添加订单</a>
             <hr class="line">
-            <a href="searchorder.jsp" class="jump">搜索订单</a>
+            <a href="searchorder.jsp?username=${username}" class="jump">搜索订单</a>
+            <hr class="line">
+            <a href="updateuser.jsp?username=${username}" class="jump">修改信息</a>
             <hr class="line">
             <%
                 if (username.compareTo("root") == 0) {
-                    out.print("<a href=\"updateorder.jsp\">更新订单</a><hr class=\"line\">");
-                    out.print("<a href=\"deleteorder.jsp\">删除订单</a><hr class=\"line\">");
-                    out.print("<a href=\"showorders.jsp\">查看所有订单</a><hr class=\"line\">");
+                    out.print("<a class=\"jump\" href=\"updateorder.jsp\">更新订单</a><hr class=\"line\">");
+                    out.print("<a class=\"jump\" href=\"deleteorder.jsp\">删除订单</a><hr class=\"line\">");
+                    out.print("<a class=\"jump\" href=\"showorders.jsp\">查看订单</a><hr class=\"line\">");
+                    out.print("<a class=\"jump\" href=\"deleteuser.jsp\">删除用户</a><hr class=\"line\">");
+                    out.print("<a class=\"jump\" href=\"showusers.jsp\">查看用户</a><hr class=\"line\">");
+                }
+                else {
+                    out.print("<a class=\"jump\" href=\"logout.jsp?username=" + username + "\">注销账户</a><hr class=\"line\">");
                 }
             %>
         </div>
     </div>
-    <%
-
-    %>
+    <a href="index.jsp" class="backhome">back</a>
 </body>
 </html>

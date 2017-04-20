@@ -1,8 +1,5 @@
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.Statement" %>
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="java.sql.SQLException" %>
-<%@ page import="javax.swing.plaf.basic.BasicInternalFrameTitlePane" %><%--
+<%@ page import="javax.swing.plaf.basic.BasicInternalFrameTitlePane" %>
+<%@ page import="java.sql.*" %><%--
   Created by IntelliJ IDEA.
   User: coldplay
   Date: 17-4-19
@@ -29,7 +26,7 @@
             <hr class="line">
             <input type="text" name="address" placeholder="地址">
             <hr class="line">
-            <input type="submit" value="提交">
+            <input type="submit" value="注册">
         </form>
     </div>
     <a href="index.jsp" class="backhome">back</a>
@@ -63,8 +60,21 @@
                 conn = DriverManager.getConnection(DB_URL, USER, PASS);
                 stmt = conn.createStatement();
 
-                String sql = "INSERT INTO user VALUE('" + username + "', '" + password + "', '" + phonenum + "', '" + address + "');";
-                stmt.execute(sql);
+                String sql = "SELECT * FROM user WHERE username='" + username + "';";
+                ResultSet rs = stmt.executeQuery(sql);
+
+                if (rs.next()) {
+    %>
+    <script type="text/javascript">
+        alert("用户名已被占用！请重新输入");
+    </script>
+    <%
+                    flag = false;
+                }
+                else {
+                    sql = "INSERT INTO user VALUE('" + username + "', '" + password + "', '" + phonenum + "', '" + address + "');";
+                    stmt.execute(sql);
+                }
 
                 stmt.close();
                 conn.close();
