@@ -58,9 +58,10 @@
         %>
         <script type="text/javascript">
             alert("注销成功！跳转到起始页面");
+            window.location.href = "index.jsp";
         </script>
         <%
-                        request.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+//                        request.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
                     }
                 }
             } catch (SQLException se) {

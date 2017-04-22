@@ -32,6 +32,9 @@
     <a href="index.jsp" class="backhome">back</a>
 
     <%
+        // 设置字符集
+        request.setCharacterEncoding("UTF-8");
+
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String phonenum = request.getParameter("phonenum");
@@ -47,8 +50,6 @@
         boolean flag = true;
 
         if (username != null && password != null && phonenum != null && address != null && password_repeat != null) {
-            username = new String(username.getBytes("ISO8859-1"), "UTF-8");
-            address = new String(address.getBytes("ISO8859-1"), "UTF-8");
 
 //            System.out.println(username + "\n" + address);
             Connection conn = null;

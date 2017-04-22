@@ -143,11 +143,12 @@
             if (flag) {
     %>
     <script type="text/javascript">
-        alert("修改信息成功！跳转用户页面");
+        alert("修改信息成功！跳转起始页面");
+        window.location.href = "index.jsp";
     </script>
     <%
-                request.setAttribute("username", username);
-                request.getServletContext().getRequestDispatcher("/user.jsp").forward(request, response);
+//                request.setAttribute("username", username);
+//                request.getServletContext().getRequestDispatcher("/user.jsp").forward(request, response);
             }
             else {
     %>

@@ -13,6 +13,9 @@
 </head>
 <body>
     <%
+        // 设置字符集
+        request.setCharacterEncoding("UTF-8");
+
         String username = request.getParameter("username");
         request.setAttribute("username", username);
 
@@ -36,8 +39,6 @@
                 conn = DriverManager.getConnection(DB_URL, USER, PASS);
                 stmt = conn.createStatement();
 
-                username = new String(username.getBytes("ISO8859-1"), "UTF-8");
-
                 String sql = "SELECT * FROM user WHERE username='" + username + "';";
                 ResultSet rs = stmt.executeQuery(sql);
 
@@ -58,9 +59,10 @@
         %>
         <script type="text/javascript">
             alert("注销成功！跳转到起始页面");
+            window.location.href = "index.jsp";
         </script>
         <%
-                        request.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+//                        request.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
                     }
                 }
             } catch (SQLException se) {

@@ -36,6 +36,9 @@
         </tr>
 
     <%
+        // 设置字符集
+        request.setCharacterEncoding("UTF-8");
+
         String username = request.getParameter("username");
         String ordernum = request.getParameter("ordernum");
         String phonenum = request.getParameter("phonenum");
@@ -49,7 +52,6 @@
         Statement stmt = null;
 
         if (username != null || ordernum != null || phonenum != null) {
-            username = new String(username.getBytes("ISO8859-1"), "UTF-8");
 
             try {
                 Class.forName(JDBC_DRIVE);

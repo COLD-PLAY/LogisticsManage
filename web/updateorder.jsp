@@ -24,6 +24,9 @@
             <th>当前状态</th>
         </tr>
         <%
+            // 设置字符集
+            request.setCharacterEncoding("UTF-8");
+
             final String JDBC_DRIVE = "com.mysql.jdbc.Driver";
             final String DB_URL = "jdbc:mysql://localhost:3306/coldplay";
 
@@ -94,8 +97,6 @@
 
                     conn = DriverManager.getConnection(DB_URL, USER, PASS);
                     stmt = conn.createStatement();
-
-                    status = new String(status.getBytes("ISO8859-1"), "UTF-8");
 
                     String sql = "UPDATE orders SET status='" + status + "' WHERE ordernum='" + ordernum + "';";
                     stmt.execute(sql);

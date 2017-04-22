@@ -17,6 +17,9 @@
 </head>
 <body>
     <%
+        // 设置字符集
+        request.setCharacterEncoding("UTF-8");
+
         String username = request.getParameter("username");
         request.setAttribute("username", username);
 
@@ -52,10 +55,6 @@
                 Date now = new Date();
                 String ordernum = sf.format(now).toString();
 
-                fromaddress = new String(fromaddress.getBytes("ISO8859-1"), "UTF-8");
-                toaddress = new String(toaddress.getBytes("ISO8859-1"), "UTF-8");
-                touser = new String(touser.getBytes("ISO8859-1"), "UTF-8");
-
                 String sql = "INSERT INTO orders VALUE('" + username + "', '" + fromphonenum + "', '" + fromaddress + "', '" + touser + "', '" + tophonenum + "', '" + toaddress + "', '" + ordernum + "', '" + fromaddress + "');";
                 stmt.execute(sql);
 
@@ -86,7 +85,7 @@
         alert("添加成功！跳转用户页面");
     </script>
     <%
-                System.out.print("添加成功！");
+//                System.out.print("添加成功！");
 //                request.getServletContext().getRequestDispatcher("/user.jsp?username=" + username);
                 request.setAttribute("username", username);
                 request.getServletContext().getRequestDispatcher("/user.jsp").forward(request, response);

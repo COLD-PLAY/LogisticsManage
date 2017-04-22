@@ -27,6 +27,9 @@
             <th>当前状态</th>
         </tr>
     <%
+        // 设置字符集
+        request.setCharacterEncoding("UTF-8");
+
         final String JDBC_DRIVE = "com.mysql.jdbc.Driver";
         final String DB_URL = "jdbc:mysql://localhost:3306/coldplay";
         final String USER = "root";

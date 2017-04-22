@@ -27,8 +27,9 @@
                 <td>当前状态</td>
             </tr>
             <%
-//                String username = new String((request.getParameter("username")).getBytes("ISO8859-1"), "UTF-8");
-//                String username = request.getParameter("username");
+                // 设置字符集
+                request.setCharacterEncoding("UTF-8");
+
                 // 以这种方式获取用户名不会出现乱码
                 String username = request.getAttribute("username").toString();
                 System.out.println(username);
@@ -102,20 +103,20 @@
         <div>
             <a href="addorder.jsp?username=${username}" class="jump">添加订单</a>
             <hr class="line">
-            <a href="searchorder.jsp?username=${username}" class="jump">搜索订单</a>
+            <a href="searchorder.jsp?username=${username}" class="jump" target="_blank">搜索订单</a>
             <hr class="line">
-            <a href="updateuser.jsp?username=${username}" class="jump">修改信息</a>
+            <a href="updateuser.jsp?username=${username}" class="jump" target="_blank">修改信息</a>
             <hr class="line">
             <%
                 if (username.compareTo("root") == 0) {
-                    out.print("<a class=\"jump\" href=\"updateorder.jsp\">更新订单</a><hr class=\"line\">");
-                    out.print("<a class=\"jump\" href=\"deleteorder.jsp\">删除订单</a><hr class=\"line\">");
-                    out.print("<a class=\"jump\" href=\"showorders.jsp\">查看订单</a><hr class=\"line\">");
-                    out.print("<a class=\"jump\" href=\"deleteuser.jsp\">删除用户</a><hr class=\"line\">");
-                    out.print("<a class=\"jump\" href=\"showusers.jsp\">查看用户</a><hr class=\"line\">");
+                    out.print("<a class=\"jump\" href=\"updateorder.jsp\" target=\"_blank\">更新订单</a><hr class=\"line\">");
+                    out.print("<a class=\"jump\" href=\"deleteorder.jsp\" target=\"_blank\">删除订单</a><hr class=\"line\">");
+                    out.print("<a class=\"jump\" href=\"showorders.jsp\" target=\"_blank\">查看订单</a><hr class=\"line\">");
+                    out.print("<a class=\"jump\" href=\"deleteuser.jsp\" target=\"_blank\">删除用户</a><hr class=\"line\">");
+                    out.print("<a class=\"jump\" href=\"showusers.jsp\" target=\"_blank\">查看用户</a><hr class=\"line\">");
                 }
                 else {
-                    out.print("<a class=\"jump\" href=\"logout.jsp?username=" + username + "\">注销账户</a><hr class=\"line\">");
+                    out.print("<a class=\"jump\" href=\"logout.jsp?username=" + username + "\" target=\"_blank\">注销账户</a><hr class=\"line\">");
                 }
             %>
         </div>

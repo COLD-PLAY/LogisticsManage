@@ -26,12 +26,13 @@
     <a href="index.jsp" class="backhome">back</a>
 
     <%
+        // 设置字符集
+        request.setCharacterEncoding("UTF-8");
+
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
         if (username != null && password != null) {
-            // 中文
-            username = new String(username.getBytes("ISO8859-1"), "UTF-8");
             System.out.println(username);
 
             final String JDBC_DRIVE = "com.mysql.jdbc.Driver";
